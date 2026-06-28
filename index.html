@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Jaffna Tourism</title>
+    <link rel="stylesheet" href="Auth.css">
+    <style>
+        /* Base Page Setup */
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+        }
+        /* Top Navigation Bar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #0275d8;
+            padding: 15px 30px;
+            color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .navbar .logo {
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        .nav-links span {
+            cursor: pointer;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-links span:hover {
+            color: #d4edda;
+        }
+        /* Page Sections Display Management */
+        .page-section {
+            display: none;
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .page-section.active {
+            display: block;
+        }
+        /* Dashboard Card Styling */
+        .info-card {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .location-item {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .location-item .desc { padding: 15px; }
+        
+        /* Form inputs for fields outside auth */
+        select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo" onclick="showPage('home')">🌴 Jaffna Tourism</div>
+        <div class="nav-links" id="nav-menu">
+            <span onclick="showPage('home')">Home</span>
+            <span onclick="showPage('about')">About</span>
+            <span onclick="showPage('locations')">Locations</span>
+            <span onclick="showPage('booking')">Book Tour</span>
+            <span id="nav-auth" onclick="showPage('auth')">Login</span>
+        </div>
+    </nav>
+
+    <section id="home" class="page-section active">
+        <div class="info-card" style="text-align: center; background: linear-gradient(rgba(2,117,216,0.1), rgba(2,117,216,0.05));">
+            <h1>Welcome to Historic Jaffna</h1>
+            <p>Explore beautiful heritage sites, serene beaches, and rich cultural landscapes of Northern Sri Lanka.</p>
+            <button class="submit-btn" style="width: auto; padding: 12px 30px;" onclick="showPage('locations')">Explore Attractions</button>
+        </div>
+    </section>
+
+    <section id="about" class="page-section">
+        <div class="info-card">
+            <h2>About Jaffna</h2>
+            <p>Jaffna is the capital city of the Northern Province of Sri Lanka. Known for its majestic historic forts, unique cuisine, vibrant colorful temples, and warm hospitality, it stands as an unmatched destination for heritage travel explorers.</p>
+        </div>
+    </section>
+
+    <section id="locations" class="page-section">
+        <h2>Popular Destination Highlights</h2>
+        <div class="grid-3">
+            <div class="location-item">
+                <div class="desc">
+                    <h3>Nallur Kandaswamy Kovil</h3>
+                    <p>An iconic historic Hindu temple complex characterized by beautiful golden arches and vibrant spiritual architecture.</p>
+                </div>
+            </div>
+            <div class="location-item">
+                <div class="desc">
+                    <h3>Jaffna Fort</h3>
+                    <p>Built by the Portuguese in 1618, this monumental stronghold overlooks the scenic lagoon landscape.</p>
+                </div>
+            </div>
+            <div class="location-item">
+                <div class="desc">
+                    <h3>Casuarina Beach</h3>
+                    <p>Famous for its shallow calm waters, white sands, and rows of pristine casuarina trees.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="auth" class="page-section">
+        <div class="auth-container" style="min-height: auto;">
+            <div class="auth-card">
+                <h2 id="form-title">Explore Jaffna - Login</h2>
+                <div id="message-box" class="message" style="display: none;"></div>
+                <form id="auth-form">
+                    <div class="input-group" id="name-group" style="display: none;">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name">
+                    </div>
+                    <div class="input-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" id="submit-btn" class="submit-btn">Sign In</button>
+                </form>
+                <p class="toggle-text">
+                    <span id="toggle-prompt">New to visiting Jaffna?</span>
+                    <span id="toggle-link"> Create an account</span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="booking" class="page-section">
+        <div class="auth-card" style="max-width: 500px; margin: 0 auto;">
+            <h2>Book Your Tour</h2>
+            <form id="booking-form">
+                <div class="input-group">
+                    <label>Select Destination</label>
+                    <select id="book-destination" required>
+                        <option value="Nallur Temple Tour">Nallur Kandaswamy Temple Tour ($20)</option>
+                        <option value="Jaffna Fort Heritage Walk">Jaffna Fort Heritage Walk ($15)</option>
+                        <option value="Casuarina Beach & Islands Escape">Casuarina Beach & Islands Escape ($40)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Number of Tourists</label>
+                    <input type="number" id="book-tickets" min="1" value="1" required>
+                </div>
+                <div class="input-group">
+                    <label>Travel Date</label>
+                    <input type="date" id="book-date" required>
+                </div>
+                <button type="submit" class="submit-btn">Proceed to Payment</button>
+            </form>
+        </div>
+    </section>
+
+    <section id="payment" class="page-section">
+        <div class="auth-card" style="max-width: 450px; margin: 0 auto;">
+            <h2>Secure Payment</h2>
+            <p style="text-align: center; color: #555;" id="payment-summary"></p>
+            <form id="payment-form">
+                <div class="input-group">
+                    <label>Name on Card</label>
+                    <input type="text" required>
+                </div>
+                <div class="input-group">
+                    <label>Card Number</label>
+                    <input type="text" placeholder="1234 5678 9101 1121" maxlength="19" required>
+                </div>
+                <div class="grid-3" style="grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div class="input-group">
+                        <label>Expiry</label>
+                        <input type="text" placeholder="MM/YY" maxlength="5" required>
+                    </div>
+                    <div class="input-group">
+                        <label>CVV</label>
+                        <input type="password" placeholder="123" maxlength="3" required>
+                    </div>
+                </div>
+                <button type="submit" class="submit-btn">Pay & Generate Bill</button>
+            </form>
+        </div>
+    </section>
+
+    <section id="bill" class="page-section">
+        <div class="auth-card" style="max-width: 500px; margin: 0 auto; border-top: 5px solid #28a745;">
+            <h2 style="color: #28a745;">Booking Confirmed!</h2>
+            <p style="text-align: center; font-size: 14px; color: #666;">Thank you for booking with Jaffna Tourism</p>
+            <hr style="border: 0; border-top: 1px dashed #ccc; margin: 20px 0;">
+            <div style="line-height: 2;">
+                <p><strong>Receipt Reference:</strong> <span id="bill-id"></span></p>
+                <p><strong>Destination:</strong> <span id="bill-dest"></span></p>
+                <p><strong>Tourists Count:</strong> <span id="bill-qty"></span></p>
+                <p><strong>Execution Date:</strong> <span id="bill-date"></span></p>
+                <hr style="border: 0; border-top: 1px dashed #ccc; margin: 20px 0;">
+                <p style="font-size: 18px;"><strong>Total Cost Paid:</strong> <span id="bill-total" style="color: #28a745; font-weight: bold;"></span></p>
+            </div>
+            <button class="submit-btn" style="background-color: #6c757d;" onclick="showPage('home')">Return to Home</button>
+        </div>
+    </section>
+
+    <script>
+        let isLogin = true;
+        const API_URL = "api.php"; 
+
+        // Active Booking state placeholders
+        let activeBooking = { destination: '', tickets: 1, date: '', total: 0 };
+
+        // Core Multi-page SPA Router Function
+        function showPage(pageId) {
+            // Hide all views
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            // Show specified view
+            document.getElementById(pageId).classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        // Global User Login Session Observer
+        function checkSession() {
+            const user = localStorage.getItem('user');
+            const authNav = document.getElementById('nav-auth');
+            if (user) {
+                const userData = JSON.parse(user);
+                authNav.textContent = `Logout (${userData.name})`;
+                authNav.onclick = () => {
+                    localStorage.removeItem('user');
+                    checkSession();
+                    showPage('home');
+                };
+            } else {
+                authNav.textContent = "Login";
+                authNav.onclick = () => showPage('auth');
+            }
+        }
+        window.onload = checkSession;
+
+        // View Management: Login / Register Flip-Flop
+        const toggleLink = document.getElementById('toggle-link');
+        toggleLink.addEventListener('click', () => {
+            isLogin = !isLogin;
+            hideMessage();
+            const formTitle = document.getElementById('form-title');
+            const nameGroup = document.getElementById('name-group');
+            const nameInput = document.getElementById('name');
+            const submitBtn = document.getElementById('submit-btn');
+            const togglePrompt = document.getElementById('toggle-prompt');
+            
+            if (isLogin) {
+                formTitle.textContent = "Explore Jaffna - Login";
+                nameGroup.style.display = "none";
+                nameInput.removeAttribute('required');
+                submitBtn.textContent = "Sign In";
+                togglePrompt.textContent = "New to visiting Jaffna?";
+                toggleLink.textContent = " Create an account";
+            } else {
+                formTitle.textContent = "Join Jaffna Tourism";
+                nameGroup.style.display = "block";
+                nameInput.setAttribute('required', 'true');
+                submitBtn.textContent = "Register Account";
+                togglePrompt.textContent = "Already have an account?";
+                toggleLink.textContent = " Login here";
+            }
+        });
+
+        // Authentication Submission Handler
+        document.getElementById('auth-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideMessage();
+
+            let payload = isLogin ? {
+                action: 'login',
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value
+            } : {
+                action: 'signup',
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value
+            };
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    if (isLogin) {
+                        localStorage.setItem('user', JSON.stringify(data.user));
+                        checkSession();
+                        showPage('home');
+                    } else {
+                        document.getElementById('auth-form').reset();
+                        toggleLink.click();
+                        showMessage("Account registered! Please sign in.", 'success');
+                    }
+                } else {
+                    showMessage(data.message, 'error');
+                }
+            } catch (err) {
+                showMessage("Failed to connect to backend API server.", 'error');
+            }
+        });
+
+        // Booking Process handling
+        document.getElementById('booking-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!localStorage.getItem('user')) {
+                showPage('auth');
+                showMessage("Please login first to reserve a tour booking package.", "error");
+                return;
+            }
+
+            const destination = document.getElementById('book-destination').value;
+            const tickets = parseInt(document.getElementById('book-tickets').value);
+            const date = document.getElementById('book-date').value;
+
+            // Simple pricing calculation engine
+            let rate = 20;
+            if (destination.includes("Walk")) rate = 15;
+            if (destination.includes("Beach")) rate = 40;
+            
+            activeBooking = { destination, tickets, date, total: (rate * tickets) };
+
+            // Setup payment description string
+            document.getElementById('payment-summary').textContent = `Paying for: ${destination} (${tickets} ticket(s)) Total: $${activeBooking.total}`;
+            showPage('payment');
+        });
+
+        // Payment Processing & Invoicing
+        document.getElementById('payment-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Build Receipt Information layout
+            document.getElementById('bill-id').textContent = "JAF-" + Math.floor(100000 + Math.random() * 900000);
+            document.getElementById('bill-dest').textContent = activeBooking.destination;
+            document.getElementById('bill-qty').textContent = activeBooking.tickets;
+            document.getElementById('bill-date').textContent = activeBooking.date;
+            document.getElementById('bill-total').textContent = `$${activeBooking.total}`;
+
+            document.getElementById('booking-form').reset();
+            document.getElementById('payment-form').reset();
+            showPage('bill');
+        });
+
+        function showMessage(text, type) {
+            const box = document.getElementById('message-box');
+            box.textContent = text;
+            box.className = `message ${type}`;
+            box.style.display = 'block';
+        }
+        function hideMessage() {
+            document.getElementById('message-box').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
